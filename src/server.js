@@ -5,7 +5,15 @@ import cors from "cors";
 
 const app = express();
 
-app.use(cors({ origin: "*" }));
+const allowedOrigins = ["http://localhost:3000", "http://localhost:5173"];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
 app.get("/", (req, res) => {
   res.send("Hello World! Again");
@@ -14,8 +22,9 @@ app.get("/", (req, res) => {
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:3000", "http://localhost:5173"],
+    origin: allowedOrigins,
     methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
   },
 });
 
