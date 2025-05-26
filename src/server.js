@@ -5,7 +5,11 @@ import cors from "cors";
 
 const app = express();
 
-const allowedOrigins = ["http://localhost:3000", "http://localhost:5173"];
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://react-social-media-client.netlify.app",
+  "http://localhost:5173",
+];
 
 app.use(
   cors({
