@@ -20,7 +20,7 @@ app.use(
 );
 
 app.get("/", (req, res) => {
-  res.send("Hello World! Again");
+  res.send("Hello World!");
 });
 
 const server = http.createServer(app);
@@ -95,6 +95,10 @@ io.on("connection", (socket) => {
 
   socket.on("endAudioCall", ({ to }) => {
     io.to(to).emit("endAudioCall");
+  });
+
+  socket.on("endVideoCall", ({ to }) => {
+    io.to(to).emit("endVideoCall");
   });
 
   socket.on("iceCandidate", ({ to, candidate }) => {
