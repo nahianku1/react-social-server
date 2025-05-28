@@ -83,7 +83,12 @@ io.on("connection", (socket) => {
 
   socket.on("call", ({ to, offer, cType }) => {
     if (to) {
-      io.to(to).emit("incomingCall", { from: socket.id, offer, cType });
+      io.to(to).emit("incomingCall", {
+        from: socket.id,
+        callerName: socket.name,
+        offer,
+        cType,
+      });
     }
   });
 
@@ -94,7 +99,6 @@ io.on("connection", (socket) => {
   socket.on("iceCandidate", ({ to, candidate }) => {
     io.to(to).emit("iceCandidate", { candidate });
   });
-
 
   socket.on("disconnect", () => {
     io.emit("getusers", getOnlineUsers());
