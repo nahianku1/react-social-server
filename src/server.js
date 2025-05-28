@@ -81,29 +81,20 @@ io.on("connection", (socket) => {
 
   //Call Negotiation
 
-  socket.on("call", ({ to, offer, audioCall }) => {
+  socket.on("call", ({ to, offer, cType }) => {
     if (to) {
-      console.log({ to, audioCall });
-      io.to(to).emit("incomingCall", { from: socket.id, offer, audioCall });
+      io.to(to).emit("incomingCall", { from: socket.id, offer, cType });
     }
   });
 
-  socket.on("callAnswered", ({ to, answer, audioCall }) => {
-    console.log({ to, audioCall });
-    io.to(to).emit("callAnswered", { answer, audioCall });
-  });
-
-  socket.on("endAudioCall", ({ to }) => {
-    io.to(to).emit("endAudioCall");
-  });
-
-  socket.on("endVideoCall", ({ to }) => {
-    io.to(to).emit("endVideoCall");
+  socket.on("callAnswered", ({ to, answer, cType }) => {
+    if (to) io.to(to).emit("callAnswered", { answer, cType });
   });
 
   socket.on("iceCandidate", ({ to, candidate }) => {
     io.to(to).emit("iceCandidate", { candidate });
   });
+
 
   socket.on("disconnect", () => {
     io.emit("getusers", getOnlineUsers());
