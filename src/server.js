@@ -92,6 +92,10 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("rejected", ({ to, cType }) => {
+    io.to(to).emit("rejected", { from: socket.name, cType });
+  });
+
   socket.on("callAnswered", ({ to, answer, cType }) => {
     if (to) io.to(to).emit("callAnswered", { answer, cType });
   });
