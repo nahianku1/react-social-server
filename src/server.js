@@ -81,13 +81,16 @@ io.on("connection", (socket) => {
 
   //Call Negotiation
 
-  socket.on("call", ({ to, offer, cType }) => {
+  socket.on("call", ({ to, offer, cType, candidates }) => {
+    console.log(`Call initiated from ${socket.id} to ${to} with candidates `, candidates);
+    
     if (to) {
       io.to(to).emit("incomingCall", {
         from: socket.id,
         callerName: socket.name,
         offer,
         cType,
+        candidates,
       });
     }
   });
@@ -96,11 +99,13 @@ io.on("connection", (socket) => {
     io.to(to).emit("rejected", { from: socket.name, cType });
   });
 
-  socket.on("callAnswered", ({ to, answer, cType }) => {
-    if (to) io.to(to).emit("callAnswered", { answer, cType });
+  socket.on("callAnswered", ({ to, answer, cType, candidates }) => {
+    if (to) io.to(to).emit("callAnswered", { answer, cType, candidates });
   });
 
   socket.on("iceCandidate", ({ to, candidate }) => {
+    console.log(`Sending ICE candidate to ${to}:`, candidate);
+
     io.to(to).emit("iceCandidate", { candidate });
   });
 
