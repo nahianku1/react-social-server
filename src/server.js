@@ -82,8 +82,11 @@ io.on("connection", (socket) => {
   //Call Negotiation
 
   socket.on("call", ({ to, offer, cType, candidates }) => {
-    console.log(`Call initiated from ${socket.id} to ${to} with candidates `, candidates);
-    
+    console.log(
+      `Call initiated from ${socket.id} to ${to} with candidates `,
+      candidates
+    );
+
     if (to) {
       io.to(to).emit("incomingCall", {
         from: socket.id,
@@ -97,6 +100,10 @@ io.on("connection", (socket) => {
 
   socket.on("rejected", ({ to, cType }) => {
     io.to(to).emit("rejected", { from: socket.name, cType });
+  });
+
+  socket.on("endCall", ({ to, cType }) => {
+    io.to(to).emit("endCall", { from: socket.name, cType });
   });
 
   socket.on("callAnswered", ({ to, answer, cType, candidates }) => {
