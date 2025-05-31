@@ -82,10 +82,6 @@ io.on("connection", (socket) => {
   //Call Negotiation
 
   socket.on("call", ({ to, offer, cType, candidates }) => {
-    console.log(
-      `Call initiated from ${socket.id} to ${to} with candidates `,
-      candidates
-    );
 
     if (to) {
       io.to(to).emit("incomingCall", {
@@ -103,6 +99,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("endCall", ({ to, cType }) => {
+    console.log(`Ending call from ${socket.id} to ${to} of type ${cType}`);
+    
     io.to(to).emit("endCall", { from: socket.name, cType });
   });
 
@@ -110,11 +108,7 @@ io.on("connection", (socket) => {
     if (to) io.to(to).emit("callAnswered", { answer, cType, candidates });
   });
 
-  socket.on("iceCandidate", ({ to, candidate }) => {
-    console.log(`Sending ICE candidate to ${to}:`, candidate);
 
-    io.to(to).emit("iceCandidate", { candidate });
-  });
 
   socket.on("disconnect", () => {
     io.emit("getusers", getOnlineUsers());
